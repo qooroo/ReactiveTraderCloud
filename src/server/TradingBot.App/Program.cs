@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Reactive.Linq;
 using Adaptive.ReactiveTrader.Contract;
+using Adaptive.ReactiveTrader.Common;
 using Adaptive.ReactiveTrader.Common.Config;
 using Adaptive.ReactiveTrader.Messaging;
 using TradingBot.Lib;
@@ -9,32 +11,33 @@ namespace TradingBot.App
 {
     public class Program
     {
-        public static void Main(string[] args)
+        private string _executionService;
+
+        public static void Main()
         {
             var p = new Program();
 
-            p.Run();
-
-
-
+            p.Run().Wait();
 
             Console.WriteLine("hai");
             Console.ReadLine();
         }
 
-        private static async void Run(IBroker broker)
+        private async Task Run()
         {
-            var config = ServiceConfiguration.FromArgs(args);
+            var config = ServiceConfiguration.FromArgs(new string[] {"prod.config.json"});
 
+            IConnected<IBroker> connectedBroker;
             using (var connectionFactory = BrokerConnectionFactory.Create(config.Broker))
             {
-                connectionFactory.GetBrokerStream()
+                connectedBroker = await connectionFactory.GetBrokerStream()
                     .Where(x => x.IsConnected)
-                    .Take(1)
-                    .Subscribe(x => Run(x.Value));
+                    .Take(1);
             }
 
-            var executionService = await broker.SubscribeToTopic<HeartbeatDto>("status")
+            var broker = connectedBroker.Value;
+
+            _executionService = await broker.SubscribeToTopic<HeartbeatDto>("status")
                 .Where(x => x.Type == "execution")
                 .Select(x => x.Instance)
                 .Take(1);
@@ -48,12 +51,12 @@ namespace TradingBot.App
                 .Subscribe(x => Sell(x));
         }
 
-        private static void Buy(dynamic trade)
+        private void Buy(dynamic trade)
         {
             
         }
 
-        private static void Sell(dynamic trade)
+        private void Sell(dynamic trade)
         {
             
         }
