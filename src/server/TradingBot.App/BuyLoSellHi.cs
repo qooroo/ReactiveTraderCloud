@@ -1,8 +1,8 @@
-﻿using System;
-using System.Reactive.Linq;
 using Adaptive.ReactiveTrader.Contract;
+using System;
+using System.Reactive.Linq;
 
-namespace TradingBot.Lib
+namespace TradingBot.App
 {
     public static class BuyLoSellHi
     {
@@ -11,7 +11,7 @@ namespace TradingBot.Lib
             return source
                 .Where(s => s.Symbol == symbol)
                 .Where(s => s.Ask <= triggerPrice)
-                .Select(s => new {s.Symbol, s.Ask, BuySell.Buy, notional})
+                .Select(s => new ExecuteTradeRequestDto { CurrencyPair = s.Symbol, SpotRate = s.Ask,Direction = DirectionDto.Buy, Notional = notional , DealtCurrency = "EUR", ValueDate = s.ValueDate.ToString("dd/MM/yy")})
                 .Take(1);
         }
 
@@ -20,7 +20,7 @@ namespace TradingBot.Lib
             return source
                 .Where(s => s.Symbol == symbol)
                 .Where(s => s.Bid >= triggerPrice)
-                .Select(s => new {s.Symbol, s.Ask, BuySell.Sell, notional})
+                .Select(s => new ExecuteTradeRequestDto { CurrencyPair = s.Symbol, SpotRate = s.Ask, Direction = DirectionDto.Sell, Notional = notional, DealtCurrency = "EUR", ValueDate = s.ValueDate.ToString("dd/MM/yy") })
                 .Take(1);
         }
     }

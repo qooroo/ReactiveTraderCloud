@@ -1,4 +1,4 @@
-namespace TradingBot.Lib
+namespace TradingBot.App
 {
     public enum BuySell
     {
