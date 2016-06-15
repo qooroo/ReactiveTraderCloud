@@ -6,7 +6,7 @@ namespace TradingBot.App
 {
     public static class BuyLoSellHi
     {
-        public static IObservable<dynamic> CreateBuyOrder(this IObservable<SpotPriceDto> source, string symbol, decimal triggerPrice, decimal notional)
+        public static IObservable<ExecuteTradeRequestDto> CreateBuyOrder(this IObservable<SpotPriceDto> source, string symbol, decimal triggerPrice, decimal notional)
         {
             return source
                 .Where(s => s.Symbol == symbol)
@@ -15,7 +15,7 @@ namespace TradingBot.App
                 .Take(1);
         }
 
-        public static IObservable<dynamic> CreateSellOrder(this IObservable<SpotPriceDto> source, string symbol, decimal triggerPrice, decimal notional)
+        public static IObservable<ExecuteTradeRequestDto> CreateSellOrder(this IObservable<SpotPriceDto> source, string symbol, decimal triggerPrice, decimal notional)
         {
             return source
                 .Where(s => s.Symbol == symbol)

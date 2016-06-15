@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using WampSharp.Core.Serialization;
 using WampSharp.V2;
 using WampSharp.V2.Core.Contracts;
-using WampSharp.V2.Rpc;
 using Adaptive.ReactiveTrader.Common;
 using Adaptive.ReactiveTrader.Common.Config;
 using Adaptive.ReactiveTrader.Contract;
@@ -67,60 +64,21 @@ namespace TradingBot.App
 
             broker.SubscribeToTopic<SpotPriceDto>("prices")
                 .CreateBuyOrder("EURUSD", 1.09433m, 1000000)
-                .Subscribe(x => ExecuteTrade(x));
+                .Subscribe(ExecuteTrade);
 
             broker.SubscribeToTopic<SpotPriceDto>("prices")
                 .CreateSellOrder("EURUSD", 1.09453m, 1000000)
-                .Subscribe(x => ExecuteTrade(x));
+                .Subscribe(ExecuteTrade);
         }
 
         private void ExecuteTrade(ExecuteTradeRequestDto trade)
         {
             Console.WriteLine($"Executing trade {trade}");
             _executionRealmProxy.RpcCatalog.Invoke
-                (new MyCallback(),
+                (new DummyCallback(),
                  new CallOptions(),
                  $"{_executionService}.executeTrade",
                  new object[] { new MessageDto {Payload = trade, ReplyTo = "", Username = "bot"}});
         }
     }
-
-    public class MyCallback : IWampRawRpcOperationClientCallback
-    {
-        public void Result<TMessage>(IWampFormatter<TMessage> formatter, ResultDetails details)
-        {
-            Console.WriteLine("Got sth 2");
-        }
-
-        public void Result<TMessage>(IWampFormatter<TMessage> formatter, ResultDetails details, TMessage[] arguments)
-        {
-            Console.WriteLine("Got sth 1");
-        }
-
-        public void Result<TMessage>(IWampFormatter<TMessage> formatter,
-                                     ResultDetails details,
-                                     TMessage[] arguments,
-                                     IDictionary<string, TMessage> argumentsKeywords)
-        {
-
-            Console.WriteLine("Got sth");
-        }
-
-        public void Error<TMessage>(IWampFormatter<TMessage> formatter, TMessage details, string error)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Error<TMessage>(IWampFormatter<TMessage> formatter, TMessage details, string error, TMessage[] arguments)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Error<TMessage>(IWampFormatter<TMessage> formatter, TMessage details, string error, TMessage[] arguments,
-                                    TMessage argumentsKeywords)
-        {
-            throw new NotImplementedException();
-        }
-    }
 }
-
