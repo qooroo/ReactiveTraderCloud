@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BlotterModel } from './ui/blotter/model';
 import { AnalyticsModel } from './ui/analytics/model';
+import { OrdersModel } from './ui/orders/model';
 import { HeaderModel } from './ui/header/model';
 import { FooterModel } from './ui/footer/model';
 import { SidebarModel } from './ui/sidebar/model';
@@ -24,6 +25,7 @@ import {
   ExecutionService,
   FakeUserRepository,
   PricingService,
+  OrdersService,
   ReferenceDataService,
   CompositeStatusService
 } from './services';
@@ -36,6 +38,7 @@ class AppBootstrapper {
   _blotterService:BlotterService;
   _executionService:ExecutionService;
   _analyticsService:AnalyticsService;
+  _ordersService:OrdersService;
   _compositeStatusService:CompositeStatusService;
   _schedulerService:SchedulerService;
 
@@ -68,6 +71,7 @@ class AppBootstrapper {
     this._blotterService = new BlotterService(ServiceConst.BlotterServiceKey, this._connection, this._schedulerService, this._referenceDataService, this._openFin);
     this._executionService = new ExecutionService(ServiceConst.ExecutionServiceKey, this._connection, this._schedulerService, this._referenceDataService, this._openFin);
     this._analyticsService = new AnalyticsService(ServiceConst.AnalyticsServiceKey, this._connection, this._schedulerService, this._referenceDataService);
+    this._ordersService = new OrdersService(ServiceConst.OrdersServiceKey, this._connection, this._schedulerService, this._referenceDataService);
     this._compositeStatusService = new CompositeStatusService(this._connection, this._pricingService, this._referenceDataService, this._blotterService, this._executionService, this._analyticsService);
 
     // connect/load all the services
@@ -127,6 +131,10 @@ class AppBootstrapper {
     // wire-up analytics
     let analyticsModel = new AnalyticsModel(WellKnownModelIds.analyticsModelId, espRouter, this._analyticsService, regionManager, this._openFin);
     analyticsModel.observeEvents();
+
+    // wire-up orders
+    let ordersModel = new OrdersModel(WellKnownModelIds.ordersModelId, espRouter, this._ordersService, regionManager, this._openFin);
+    ordersModel.observeEvents();
 
     // wire-up the header
     let headerModel = new HeaderModel(WellKnownModelIds.headerModelId, espRouter);

@@ -25,6 +25,8 @@ $glyphicons-font-path: '../fonts/bootstrap/glyphicons-halflings-regular';
 
 .glyphicon-stats { &:before { content: '\e185'; }}
 
+.glyphicon-list { &:before { content: '\e032'; }}
+
 .glyphicon-refresh { &:before { content: "\e031"; }}
 
 .glyphicon-log-out { &:before { content: "\e163"; } }

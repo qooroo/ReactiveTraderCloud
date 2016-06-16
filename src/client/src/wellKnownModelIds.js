@@ -41,6 +41,10 @@ export default class WellKnownModelIds {
     return 'analyticsModelId';
   }
 
+  static get ordersModelId() {
+    return 'ordersModelId';
+  }
+
   static get blotterModelId() {
     return 'blotterModelId';
   }

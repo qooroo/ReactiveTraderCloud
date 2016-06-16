@@ -1,0 +1,81 @@
+$positive-color:    #3FCF1E;
+$negative-color:    #CC3350;
+$barchart-text-color:gray;
+$bar-bg-color:      #414D5C;
+$container-bg-color:#293543;
+$highlight-color:   #eee;
+$stroke-color:      #212a35;
+$gray:              #294464;
+$bar-height:        12px;
+
+$orders-header-colour: #ffffff;
+$default-padding: 10px;
+
+.orders__container {
+  align-self: stretch;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100%;
+  background: $container-bg-color;
+  border-left: 1px solid #414444;
+  padding: 20px;
+
+  #popout-content-container & {
+    height: 100%;
+  }
+}
+
+.orders__controls {
+  float: right;
+  color: white;
+}
+
+.orders__header {
+  font-size: 16px;
+  color: $orders-header-colour;
+  background: $container-bg-color;
+  padding-bottom: 10px;
+}
+
+.orders__header--bold{
+  font-weight: bold;
+}
+
+.orders__header-block{
+  display: block;
+  padding-bottom: 2px;
+}
+
+.orders__buttons{
+  width: 100%;
+  text-align: center;
+}
+
+.orders__buttons-bar {
+  display: inline-block;
+  border: 1px solid black;
+}
+
+.orders__buttons-tab-btn{
+  color: $barchart-text-color;
+  font-size: 16px;
+  position: relative;
+  padding: 10px 10px 6px 10px;
+  background: $container-bg-color;
+  &:hover{
+    background: #294464;
+  }
+}
+
+.orders__buttons-tab-btn--selected{
+  color: $highlight-color;
+  background: $stroke-color;
+}
+
+.orders__icon--tearoff {
+  cursor: pointer;
+}
+
+.orders__icon--tearoff--hidden {
+  display: none;
+}

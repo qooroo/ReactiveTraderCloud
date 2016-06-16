@@ -18,7 +18,7 @@ export default class SidebarView extends ViewBase {
       return null;
     }
 
-    let buttonClassNames = classnames (
+    let analyticsButtonClassNames = classnames (
       'sidebar__element-button  glyphicon glyphicon-stats',
       {
         'sidebar__element--active': model.showAnalytics,
@@ -26,9 +26,18 @@ export default class SidebarView extends ViewBase {
       }
     );
 
+    let ordersButtonClassNames = classnames (
+      'sidebar__element-button  glyphicon glyphicon-list',
+      {
+        'sidebar__element--active': model.showOrders,
+        'sidebar__element--inactive' :  !model.showOrders
+      }
+    );
+
     return (
       <div className='sidebar__container'>
-        <div className={buttonClassNames} onClick={() => model.toggleAnalyticsPanel()}/>
+        <div className={analyticsButtonClassNames} onClick={() => model.toggleAnalyticsPanel()}/>
+        <div className={ordersButtonClassNames} onClick={() => model.toggleOrdersPanel()}/>
         <div className='sidebar__element'></div>
       </div>
     );

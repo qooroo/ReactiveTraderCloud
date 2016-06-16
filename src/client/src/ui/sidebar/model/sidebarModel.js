@@ -37,6 +37,7 @@ export default class SidebarModel extends ModelBase {
 
     //observe analytic spanel tearOff event to hide/display the side panel
     this._observeAnalyticsWindowEvents();
+    this._observeOrdersWindowEvents();
   }
 
   toggleAnalyticsPanel(){
@@ -60,6 +61,33 @@ export default class SidebarModel extends ModelBase {
       this.router
         .getEventObservable(WellKnownModelIds.popoutRegionModelId, 'removeFromRegion')
         .where(({model}) => model.modelId === WellKnownModelIds.analyticsModelId)
+        .observe(() => this.router.runAction(this.modelId, () => {
+          this.showSidebar = true;
+        }))
+    );
+  }
+
+  toggleOrdersPanel(){
+    if (this.showOrders){
+      this.router.publishEvent(this.modelId, 'hideOrders', {});
+    }else{
+      this.router.publishEvent(this.modelId, 'showOrders', {});
+    }
+    this.showOrders = !this.showOrders;
+  }
+
+  _observeOrdersWindowEvents(){
+    this.addDisposable(
+      this.router
+        .getEventObservable(WellKnownModelIds.analyticsModelId, 'popOutOrders')
+        .observe(() => this.router.runAction(this.modelId, ()=> {
+          this.showSidebar = false; // todo - only when both popped out
+        }))
+    );
+    this.addDisposable(
+      this.router
+        .getEventObservable(WellKnownModelIds.popoutRegionModelId, 'removeFromRegion')
+        .where(({model}) => model.modelId === WellKnownModelIds.ordersModelId)
         .observe(() => this.router.runAction(this.modelId, () => {
           this.showSidebar = true;
         }))

@@ -18,4 +18,8 @@ export default class ServiceConst {
   static get AnalyticsServiceKey() : String {
     return 'analytics';
   }
+
+  static get OrdersServiceKey() : String {
+    return 'orders';
+  }
 }
