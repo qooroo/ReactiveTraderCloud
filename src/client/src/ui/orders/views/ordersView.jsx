@@ -30,7 +30,7 @@ export default class OrdersView extends ViewBase {
   render() {
 
     return (
-        <div className='orders__container'>
+        <div className='orders__container animated fadeIn'>
           <div ref='ordersInnerContainer'>ORDERS</div>
         </div>);
 

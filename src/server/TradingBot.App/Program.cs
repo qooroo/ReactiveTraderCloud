@@ -18,20 +18,20 @@ namespace TradingBot.App
         private IServiceConfiguration _config;
         private IWampRealmProxy _executionRealmProxy;
 
-        public static void Main()
+        public static void Main(string[] args)
         {
             var p = new Program();
 
-            p.Run().Wait();
+            p.Run(args).Wait();
 
             Console.ReadLine();
         }
 
-        private async Task Run()
+        private async Task Run(string[] args)
         {
             Console.WriteLine("Running...");
 
-            _config = ServiceConfiguration.FromArgs(new string[] {"config.dev.json"});
+            _config = ServiceConfiguration.FromArgs(args);
 
             IConnected<IBroker> connectedBroker;
             using (var connectionFactory = BrokerConnectionFactory.Create(_config.Broker))

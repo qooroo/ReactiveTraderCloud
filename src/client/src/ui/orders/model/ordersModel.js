@@ -4,9 +4,7 @@ import { ServiceStatus } from '../../../system/service';
 import { logger, Environment } from '../../../system';
 import { ModelBase, RegionManagerHelper } from '../../common';
 import { RegionManager, RegionNames, view  } from '../../regions';
-import {
-  RegionSettings
-} from '../../../services/model';
+import { RegionSettings } from '../../../services/model';
 import { OrdersView } from '../views';
 import { OpenFin } from '../../../system/openFin';
 import { WellKnownModelIds } from '../../../';
