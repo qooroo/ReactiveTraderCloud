@@ -16,6 +16,7 @@ export default class SidebarModel extends ModelBase {
   _regionName:string;
   showSidebar:boolean;
   showAnalytics:boolean;
+  showOrders:boolean;
 
   constructor(modelId:string,
               router:Router,
@@ -28,6 +29,7 @@ export default class SidebarModel extends ModelBase {
     this._regionManagerHelper = new RegionManagerHelper(this._regionName, regionManager, this, this._regionSettings);
     this.showSidebar = true;
     this.showAnalytics = true;
+    this.showOrders = false;
   }
 
   @observeEvent('init')
@@ -43,10 +45,13 @@ export default class SidebarModel extends ModelBase {
   toggleAnalyticsPanel(){
     if (this.showAnalytics){
       this.router.publishEvent(this.modelId, 'hideAnalytics', {});
+      this.router.publishEvent(this.modelId, 'showOrders', {});
     }else{
       this.router.publishEvent(this.modelId, 'showAnalytics', {});
+      this.router.publishEvent(this.modelId, 'hideOrders', {});
     }
     this.showAnalytics = !this.showAnalytics;
+    this.showOrders = !this.showAnalytics;
   }
 
   _observeAnalyticsWindowEvents(){
@@ -70,10 +75,13 @@ export default class SidebarModel extends ModelBase {
   toggleOrdersPanel(){
     if (this.showOrders){
       this.router.publishEvent(this.modelId, 'hideOrders', {});
+      this.router.publishEvent(this.modelId, 'showAnalytics', {});
     }else{
       this.router.publishEvent(this.modelId, 'showOrders', {});
+      this.router.publishEvent(this.modelId, 'hideAnalytics', {});
     }
     this.showOrders = !this.showOrders;
+    this.showAnalytics = !this.showOrders;
   }
 
   _observeOrdersWindowEvents(){
@@ -81,7 +89,7 @@ export default class SidebarModel extends ModelBase {
       this.router
         .getEventObservable(WellKnownModelIds.analyticsModelId, 'popOutOrders')
         .observe(() => this.router.runAction(this.modelId, ()=> {
-          this.showSidebar = false; // todo - only when both popped out
+          this.showSidebar = false;
         }))
     );
     this.addDisposable(

@@ -17,6 +17,10 @@ export default class WellKnownModelIds {
     return 'quickAccessRegionModelId';
   }
 
+  static get ordersRegionModelId() {
+    return 'ordersRegionModelId';
+  }
+
   static get blotterRegionModelId() {
     return 'blotterRegionModelId';
   }

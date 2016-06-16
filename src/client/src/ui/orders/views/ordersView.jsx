@@ -28,6 +28,12 @@ export default class OrdersView extends ViewBase {
   }
 
   render() {
+
+    return (
+        <div className='orders__container'>
+          <div ref='ordersInnerContainer'>ORDERS</div>
+        </div>);
+
     let model:OrdersModel = this.state.model;
     if (!model) {
       return null;

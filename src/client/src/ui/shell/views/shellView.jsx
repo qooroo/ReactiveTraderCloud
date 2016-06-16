@@ -31,7 +31,9 @@ export default class ShellView extends ViewBase {
     let analyticsClasses = classnames('shell__analytics', {
       'shell__analytics--expanded': model.canExpandMainArea
     });
-
+    let ordersClasses = classnames('shell__orders', {
+      'shell__orders--expanded': model.canExpandMainArea
+    });
     let sidebarClasses = classnames('shell__side-bar', {
       'shell__side-bar--expanded': model.canExpandMainArea
     });
@@ -54,6 +56,7 @@ export default class ShellView extends ViewBase {
           </Modal>
           <WorkspaceRegionView className={workspaceClasses} modelId={wellKnownModelIds.workspaceRegionModelId}/>
           <SingleItemRegionView className={analyticsClasses} modelId={wellKnownModelIds.quickAccessRegionModelId}/>
+          <SingleItemRegionView className={ordersClasses} modelId={wellKnownModelIds.ordersRegionModelId}/>
           <SingleItemRegionView className={sidebarClasses} modelId={wellKnownModelIds.sidebarRegionModelId}/>
           <SingleItemRegionView className='shell__blotter' modelId={wellKnownModelIds.blotterRegionModelId}/>
           <div className='shell__footer'>

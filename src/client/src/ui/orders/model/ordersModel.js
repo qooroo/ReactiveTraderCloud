@@ -33,7 +33,7 @@ export default class OrdersModel extends ModelBase {
   ) {
     super(modelId, router);
     this._ordersService = ordersService;
-    this._regionName = RegionNames.quickAccess;
+    this._regionName = RegionNames.orders;
     this.isOrdersServiceConnected = false;
     this._regionSettings = new RegionSettings('Orders', 400, 800, false);
     this._regionManager = regionManager;
@@ -50,13 +50,13 @@ export default class OrdersModel extends ModelBase {
 //     this.addDisposable(this.router.observeEventsOn(this._modelId));
 //   }
 
-//   @observeEvent('init')
-//   _onInit() {
-//     _log.info(`Orders model starting`);
-//     this._subscribeToConnectionStatus();
-//     this._regionManagerHelper.init();
-//     this._observeSidebarEvents();
-//   }
+  @observeEvent('init')
+  _onInit() {
+    _log.info(`Orders model starting`);
+    this._subscribeToConnectionStatus();
+    this._regionManagerHelper.init();
+    this._observeSidebarEvents();
+  }
 
 //   @observeEvent('referenceDataLoaded')
 //   _onReferenceDataLoaded() {
@@ -70,31 +70,31 @@ export default class OrdersModel extends ModelBase {
 //     this._regionManagerHelper.popout();
 //   }
 
-//   _subscribeToConnectionStatus() {
-//     this.addDisposable(
-//       this._ordersService.serviceStatusStream.subscribeWithRouter(
-//         this.router,
-//         this.modelId,
-//         (status:ServiceStatus) => {
-//           this.isOrdersServiceConnected = status.isConnected;
-//         })
-//     );
-//   }
+  _subscribeToConnectionStatus() {
+    this.addDisposable(
+      this._ordersService.serviceStatusStream.subscribeWithRouter(
+        this.router,
+        this.modelId,
+        (status:ServiceStatus) => {
+          this.isOrdersServiceConnected = status.isConnected;
+        })
+    );
+  }
 
-//   _observeSidebarEvents(){
-//     this.addDisposable(
-//       this.router
-//         .getEventObservable(WellKnownModelIds.sidebarModelId, 'hideOrders')
-//         .observe(() => this.router.runAction(this.modelId, ()=> {
-//           this._regionManagerHelper.removeFromRegion();
-//         }))
-//     );
-//     this.addDisposable(
-//       this.router
-//         .getEventObservable(WellKnownModelIds.sidebarModelId, 'showOrders')
-//         .observe(() => this.router.runAction(this.modelId, () => {
-//           this._regionManagerHelper.addToRegion();
-//         }))
-//     );
-//   }
+  _observeSidebarEvents(){
+    this.addDisposable(
+      this.router
+        .getEventObservable(WellKnownModelIds.sidebarModelId, 'hideOrders')
+        .observe(() => this.router.runAction(this.modelId, ()=> {
+          this._regionManagerHelper.removeFromRegion();
+        }))
+    );
+    this.addDisposable(
+      this.router
+        .getEventObservable(WellKnownModelIds.sidebarModelId, 'showOrders')
+        .observe(() => this.router.runAction(this.modelId, () => {
+          this._regionManagerHelper.addToRegion();
+        }))
+    );
+  }
 }

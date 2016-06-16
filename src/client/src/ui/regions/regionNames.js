@@ -11,8 +11,10 @@ export default class RegionNames {
   static get quickAccess() {
     return 'quickAccess';
   }
-
   static get sidebar() {
     return 'sidebar';
+  }
+  static get orders() {
+    return 'orders';
   }
 }

@@ -100,8 +100,10 @@ class AppBootstrapper {
     quickAccessRegionModel.observeEvents();
     let sidebarRegionModel = new SingleItemRegionModel(WellKnownModelIds.sidebarRegionModelId, RegionNames.sidebar, espRouter);
     sidebarRegionModel.observeEvents();
+    let ordersRegionModel = new SingleItemRegionModel(WellKnownModelIds.ordersRegionModelId, RegionNames.orders, espRouter);
+    ordersRegionModel.observeEvents();
     let regionManager = new RegionManager(
-      [workspaceRegionModel, popoutRegionModel, blotterRegionModel, quickAccessRegionModel, sidebarRegionModel], this._openFin.isRunningInOpenFin);
+      [workspaceRegionModel, popoutRegionModel, blotterRegionModel, quickAccessRegionModel, sidebarRegionModel, ordersRegionModel], this._openFin.isRunningInOpenFin);
 
     // wire up the shell
     let shellModel = new ShellModel(WellKnownModelIds.shellModelId, espRouter, this._connection, this._openFin);
