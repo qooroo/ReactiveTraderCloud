@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TradingBot.App": {
+      "commandName": "Project",
+      "commandLineArgs": "config.docker.json"
+    }
+  }
+}
