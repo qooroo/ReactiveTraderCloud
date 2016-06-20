@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Reactive.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WampSharp.V2;
-using WampSharp.V2.Core.Contracts;
 using Adaptive.ReactiveTrader.Common;
 using Adaptive.ReactiveTrader.Common.Config;
-using Adaptive.ReactiveTrader.Contract;
 using Adaptive.ReactiveTrader.Messaging;
-using Adaptive.ReactiveTrader.Messaging.Abstraction;
-using Adaptive.ReactiveTrader.Messaging.WAMP;
-using Newtonsoft.Json;
 using WampSharp.V2.Client;
 
 namespace TradingBot.App
@@ -32,21 +26,13 @@ namespace TradingBot.App
         {
             _config = ServiceConfiguration.FromArgs(args);
 
-            await InitializeConnection();
+            await ConnectToBroker();
 
-            var serviceHost = new SimpleOrdersService(_broker, "simpleOrders", _executionRealmProxy, _executionService);
+            var serviceHost = new OrdersService(_broker, "orders", _executionRealmProxy, _executionService);
             serviceHost.Initialize();
-
-            //_broker.SubscribeToTopic<SpotPriceDto>("prices")
-            //    .CreateBuyOrder("EURUSD", 1.09433m, 1000000)
-            //    .Subscribe(ExecuteTrade);
-
-            //_broker.SubscribeToTopic<SpotPriceDto>("prices")
-            //    .CreateSellOrder("EURUSD", 1.09453m, 1000000)
-            //    .Subscribe(ExecuteTrade);
         }
 
-        private async Task InitializeConnection()
+        private async Task ConnectToBroker()
         {
             Console.WriteLine("Initializing connection...");
 
@@ -78,52 +64,6 @@ namespace TradingBot.App
             Console.WriteLine($"Opened channel to {_executionService}");
 
             _executionRealmProxy = channel.RealmProxy;
-        }
-    }
-
-    public class SimpleOrdersService : ServiceHostBase
-    {
-        private readonly IWampRealmProxy _realmProxy;
-        private readonly string _executionService;
-        private readonly IBroker _broker;
-
-        public SimpleOrdersService(IBroker broker, string type, IWampRealmProxy realmProxy, string executionService) : base(broker, type)
-        {
-            _broker = broker;
-            _realmProxy = realmProxy;
-            _executionService = executionService;
-        }
-
-        public void Initialize()
-        {
-            RegisterCall("placeOrder", PlaceOrder);
-        }
-
-        private Task PlaceOrder(IRequestContext ctx, IMessage msg)
-        {
-            Console.WriteLine("Received Order from {username}", ctx.UserSession.Username);
-
-            var payload = JsonConvert.DeserializeObject<ExecuteTradeRequestDto>(Encoding.UTF8.GetString(msg.Payload));
-
-            if (payload.Direction == DirectionDto.Buy)
-            {
-                _broker.SubscribeToTopic<SpotPriceDto>("prices")
-                    .CreateOrder(payload)
-                    .Subscribe(ExecuteTrade);
-            }
-
-            return Task.FromResult("Order placed");
-        }
-
-        private void ExecuteTrade(ExecuteTradeRequestDto trade)
-        {
-            Console.WriteLine($"Executing order to {trade.Direction} {trade.CurrencyPair} at {trade.SpotRate}, notional {trade.Notional}");
-
-            _realmProxy.RpcCatalog.Invoke
-                (new DummyCallback(),
-                 new CallOptions(),
-                 $"{_executionService}.executeTrade",
-                 new object[] { new MessageDto { Payload = trade, ReplyTo = "", Username = "bot" } });
         }
     }
 }
