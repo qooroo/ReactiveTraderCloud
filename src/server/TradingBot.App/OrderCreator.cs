@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 
 namespace TradingBot.App
 {
-    public static class CreateOrderExtensions
+    public static class OrderCreator
     {
         public static IObservable<ExecuteTradeRequestDto> CreateOrder(this IObservable<SpotPriceDto> source, ExecuteTradeRequestDto request)
         {

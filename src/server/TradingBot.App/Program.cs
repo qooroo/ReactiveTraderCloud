@@ -19,6 +19,7 @@ namespace TradingBot.App
         public static void Main(string[] args)
         {
             new Program().Run(args);
+
             Console.ReadLine();
         }
 
@@ -29,6 +30,7 @@ namespace TradingBot.App
             await ConnectToBroker();
 
             var serviceHost = new OrdersService(_broker, "orders", _executionRealmProxy, _executionService);
+
             serviceHost.Initialize();
         }
 
