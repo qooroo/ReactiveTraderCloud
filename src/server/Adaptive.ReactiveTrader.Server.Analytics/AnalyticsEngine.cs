@@ -107,7 +107,7 @@ namespace Adaptive.ReactiveTrader.Server.Analytics
                 _currentPositionUpdatesDto = pud;
             }
 
-            Log.Information(pud.ToString());
+            //Log.Information(pud.ToString());
 
             _updates.OnNext(pud);
         }
