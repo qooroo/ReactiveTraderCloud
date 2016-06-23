@@ -25,6 +25,7 @@
     "lint": "eslint --ext .js --ext .jsx src",
     "dev:local": "npm run dev -- --endpoint local",
     "dev:docker": "npm run dev -- --endpoint docker",
+    "dev:webdev": "npm run dev -- --endpoint webdev",
     "dev:cloud": "npm run dev -- --endpoint demo",
     "dev:openfin:local": "node ./node_modules/npm-run-all/bin/npm-run-all --parallel openfin dev:local",
     "dev:openfin:cloud": "node ./node_modules/npm-run-all/bin/npm-run-all --parallel openfin dev:cloud",

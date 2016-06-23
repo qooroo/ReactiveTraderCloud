@@ -7,8 +7,13 @@ import { OrdersModel } from '../model';
 import numeral from 'numeral';
 import Dimensions from 'react-dimensions';
 import './orders.scss';
+import {
+  Direction,
+  ExecuteTradeRequest,
+  CurrencyPair,
+} from '../../../services/model';
 
-var _log:logger.Logger = logger.create('OrdersView');
+var _log: logger.Logger = logger.create('OrdersView');
 
 @Dimensions()
 export default class OrdersView extends ViewBase {
@@ -19,46 +24,68 @@ export default class OrdersView extends ViewBase {
     };
   }
 
-  componentDidMount(){
-    
-  }
-
-  componentDidUpdate() {
-    
+  placeOrder(evt) {
+    const direction = this.state.model.isSell ? Direction.Sell : Direction.Buy;
+    const base = this.state.model.ccyPair.slice(0,3);
+    console.log('placing order: ' + direction + ' ' + this.state.model.ccyPair + ' (base ' + base + ') ' + this.state.model.notional + ' @ ' + this.state.model.rate);
+    let trade = new ExecuteTradeRequest(this.state.model.ccyPair, this.state.model.rate, direction.name, this.state.model.notional, base);
+    router.publishEvent(this.props.modelId, 'placeOrder', { trade });
   }
 
   render() {
 
-    return (
-        <div className='orders__container animated fadeIn'>
-          <div ref='ordersInnerContainer'>ORDERS</div>
-        </div>);
-
-    let model:OrdersModel = this.state.model;
-    if (!model) {
-      return null;
-    }
-    if (!model.isOrdersServiceConnected)
-      return (
-        <div className='orders__container'>
-          <div ref='ordersInnerContainer'></div>
-        </div>);
-
-    let newWindowBtnClassName = classnames(
-      'glyphicon glyphicon-new-window',
-      {
-        'orders__icon--tearoff' : !model.canPopout,
-        'orders__icon--tearoff--hidden' : model.canPopout
-      }
-    );
+    let model = this.state.model;
+    let isSell = model.isSell;
+    let baseClassName = 'btn orders__buttons-tab-btn ';
+    let selectedClassName = `${baseClassName} orders__buttons-tab-btn--selected`;
+    let sellButtonClassName = isSell ? selectedClassName : baseClassName;
+    let buyButtonClassName = isSell ? baseClassName : selectedClassName;
 
     return (
-      <div className='orders orders__container animated fadeIn'>
-        <div className='orderes__controls popout__controls'>
-          <i className={newWindowBtnClassName}
-             onClick={() => router.publishEvent(this.props.modelId, 'popOutOrders', {})}/>
+      <div className='orders__container animated fadeIn'>
+        <div className='orders__header orders__header--bold orders__header-block'>
+          ORDERS
         </div>
-        // content
+        <div className='orders__title-container'>
+          <div className='orders__buttons-bar'>
+            <button
+              className={buyButtonClassName}
+              onClick={() => router.publishEvent(this.props.modelId, 'toggleBuySellMode', {})}>BUY
+            </button>
+            <button
+              className={sellButtonClassName}
+              onClick={() => router.publishEvent(this.props.modelId, 'toggleBuySellMode', {})}>SELL
+            </button>
+          </div>
+        </div>
+        <div className='orders__form-element-container orders__form-spacer'>
+          <div className='orders__form-element-label'>Currency Pair</div>
+          <input
+            className='orders__form-element-content orders__input'
+            type='text'
+            onChange={e => this.state.model.ccyPair = e.target.value} />
+        </div>
+        <div className='orders__form-element-container orders__form-spacer'>
+          <div className='orders__form-element-label'>Rate</div>
+          <input
+            className='orders__form-element-content orders__input'
+            type='text'
+            onChange={e => this.state.model.rate = e.target.value}/>
+        </div>
+        <div className='orders__form-element-container orders__form-spacer'>
+          <div className='orders__form-element-label'>Notional</div>
+          <input
+            className='orders__form-element-content orders__input'
+            type='text'
+            onChange={e => this.state.model.notional = e.target.value}/>
+        </div>
+        <div className='orders__title-container'>
+          <button
+            className='btn orders__form-btn'
+            onClick={() => this.placeOrder()}>
+            Place Order
+          </button>
+        </div>
       </div>);
   }
 }

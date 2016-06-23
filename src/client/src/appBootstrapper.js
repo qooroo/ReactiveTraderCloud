@@ -72,13 +72,14 @@ class AppBootstrapper {
     this._executionService = new ExecutionService(ServiceConst.ExecutionServiceKey, this._connection, this._schedulerService, this._referenceDataService, this._openFin);
     this._analyticsService = new AnalyticsService(ServiceConst.AnalyticsServiceKey, this._connection, this._schedulerService, this._referenceDataService);
     this._ordersService = new OrdersService(ServiceConst.OrdersServiceKey, this._connection, this._schedulerService, this._referenceDataService);
-    this._compositeStatusService = new CompositeStatusService(this._connection, this._pricingService, this._referenceDataService, this._blotterService, this._executionService, this._analyticsService);
+    this._compositeStatusService = new CompositeStatusService(this._connection, this._pricingService, this._referenceDataService, this._blotterService, this._executionService, this._analyticsService, this._ordersService);
 
     // connect/load all the services
     this._pricingService.connect();
     this._blotterService.connect();
     this._executionService.connect();
     this._analyticsService.connect();
+    this._ordersService.connect();
     this._compositeStatusService.start();
     this._referenceDataService.connect();
     this._referenceDataService.load();

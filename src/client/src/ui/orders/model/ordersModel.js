@@ -1,33 +1,37 @@
-import { Router,  observeEvent } from 'esp-js/src';
+import { Router, observeEvent } from 'esp-js/src';
 import { OrdersService } from '../../../services';
 import { ServiceStatus } from '../../../system/service';
 import { logger, Environment } from '../../../system';
 import { ModelBase, RegionManagerHelper } from '../../common';
 import { RegionManager, RegionNames, view  } from '../../regions';
-import { RegionSettings } from '../../../services/model';
+import { RegionSettings, ExecuteTradeRequest } from '../../../services/model';
 import { OrdersView } from '../views';
 import { OpenFin } from '../../../system/openFin';
 import { WellKnownModelIds } from '../../../';
 
-var _log:logger.Logger = logger.create('OrdersModel');
+var _log: logger.Logger = logger.create('OrdersModel');
 
 @view(OrdersView)
 export default class OrdersModel extends ModelBase {
-  _ordersService:OrdersService;
-  _regionManagerHelper:RegionManagerHelper;
-  _regionManager:RegionManager;
-  _regionSettings:RegionSettings;
-  _regionName:string;
-  _openFin:OpenFin;
+  _ordersService: OrdersService;
+  _regionManagerHelper: RegionManagerHelper;
+  _regionManager: RegionManager;
+  _regionSettings: RegionSettings;
+  _regionName: string;
+  _openFin: OpenFin;
 
   isOrdersServiceConnected: Boolean;
+  isSell: Boolean;
+  ccyPair: String;
+  rate: Number;
+  notional: Number;
 
   constructor(
-    modelId:string,
-    router:Router,
-    ordersService:OrdersService,
-    regionManager:RegionManager,
-    openFin:OpenFin
+    modelId: string,
+    router: Router,
+    ordersService: OrdersService,
+    regionManager: RegionManager,
+    openFin: OpenFin
   ) {
     super(modelId, router);
     this._ordersService = ordersService;
@@ -43,11 +47,6 @@ export default class OrdersModel extends ModelBase {
     return Environment.isRunningInIE;
   }
 
-//   observeEvents() {
-//     super.observeEvents();
-//     this.addDisposable(this.router.observeEventsOn(this._modelId));
-//   }
-
   @observeEvent('init')
   _onInit() {
     _log.info(`Orders model starting`);
@@ -56,34 +55,40 @@ export default class OrdersModel extends ModelBase {
     this._observeSidebarEvents();
   }
 
-//   @observeEvent('referenceDataLoaded')
-//   _onReferenceDataLoaded() {
-//     _log.info(`Ref data loaded, subscribing to orders stream`);
-//     // todo
-//   }
+  @observeEvent('toggleBuySellMode')
+  _toggleBuySellMode() {
+    _log.info(`Changing orders buy sell mode`);
+    this.isSell = !this.isSell;
+  }
 
-//   @observeEvent('popOutOrders')
-//   _onPopOutOrders() {
-//     _log.info(`Popping out orders`);
-//     this._regionManagerHelper.popout();
-//   }
+  @observeEvent('placeOrder')
+  _placeOrder(e: { trade: ExecuteTradeRequest }) {
+    this._ordersService.placeOrder(e.trade);
+    // console.log('orders VM place order ' + e.trade.CurrencyPair);
+    // console.log('orders svc connected: ' + this.isOrdersServiceConnected);
+    // if (this.isOrderServiceConnected) {
+    //   console.log('calling orders service');
+    //   this._ordersService.placeOrder(e.trade);
+    // }
+  }
 
+  @observeEvent('init')
   _subscribeToConnectionStatus() {
     this.addDisposable(
       this._ordersService.serviceStatusStream.subscribeWithRouter(
         this.router,
         this.modelId,
-        (status:ServiceStatus) => {
+        (status: ServiceStatus) => {
           this.isOrdersServiceConnected = status.isConnected;
         })
     );
   }
 
-  _observeSidebarEvents(){
+  _observeSidebarEvents() {
     this.addDisposable(
       this.router
         .getEventObservable(WellKnownModelIds.sidebarModelId, 'hideOrders')
-        .observe(() => this.router.runAction(this.modelId, ()=> {
+        .observe(() => this.router.runAction(this.modelId, () => {
           this._regionManagerHelper.removeFromRegion();
         }))
     );

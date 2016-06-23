@@ -53,6 +53,7 @@ $default-padding: 10px;
 
 .orders__buttons-bar {
   display: inline-block;
+  margin-top: 20px;
   border: 1px solid black;
 }
 
@@ -78,4 +79,72 @@ $default-padding: 10px;
 
 .orders__icon--tearoff--hidden {
   display: none;
+}
+
+
+
+
+
+
+
+.orders__form-spacer {
+  margin: 15px 0px 15px 0px;
+}
+
+.orders__form-element-container {
+  display: flex;
+}
+
+.orders__form-element-label {
+  display: inline-block;
+  opacity: 0.5;
+  color: white;
+  width: 100px;
+  flex: 0 1 auto;
+  margin-right: 10px;
+}
+
+.orders__form-element-content {
+  flex: 1 1 auto;
+}
+
+.orders__input {
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid transparent;
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  width: 100px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  color: white;
+  &:hover,
+  &:focus {
+    border-bottom: 1px solid white;
+  }
+  &:focus {
+    outline: none;
+    background-color: #2f5078;
+  }
+  &::selection {
+    background-color: transparent;
+  }
+}
+
+.orders__title-container{
+  width: 100%;
+  text-align: center !important;
+}
+
+.orders__form-btn {
+  color: white;
+  font-size: 16px;
+  position: relative;
+  margin-top: 10px;
+  padding: 10px 10px 10px 10px;
+  background: lighten($color: $container-bg-color, $amount: 5%);
+  &:hover{
+    background: #294464;
+  }
 }

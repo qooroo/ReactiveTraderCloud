@@ -1,6 +1,6 @@
 import { DisposableBase } from 'esp-js/src';
 import { ServiceStatusLookup } from './model';
-import { PricingService, ReferenceDataService, BlotterService, ExecutionService, AnalyticsService } from './';
+import { PricingService, ReferenceDataService, BlotterService, ExecutionService, AnalyticsService, OrdersService } from './';
 import { Connection, ServiceStatus } from './../system/service';
 import { ConnectionType } from './../services/model';
 
@@ -11,13 +11,15 @@ export default class CompositeStatusService extends DisposableBase {
   _blotterService:BlotterService;
   _executionService:ExecutionService;
   _analyticsService:AnalyticsService;
+  _ordersService:OrdersService;
 
   constructor(connection:Connection,
               pricingService:PricingService,
               referenceDataService:PricingService,
               blotterService:BlotterService,
               executionService:ExecutionService,
-              analyticsService:AnalyticsService) {
+              analyticsService:AnalyticsService,
+              ordersService:OrdersService) {
     super();
     this._connection = connection;
     this._pricingService = pricingService;
@@ -25,6 +27,7 @@ export default class CompositeStatusService extends DisposableBase {
     this._blotterService = blotterService;
     this._executionService = executionService;
     this._analyticsService = analyticsService;
+    this._ordersService = ordersService;
     this._serviceStatusStream = this._createServiceStatusStream();
     this._currentServiceStatusLookup = new ServiceStatusLookup();
   }
@@ -97,7 +100,8 @@ export default class CompositeStatusService extends DisposableBase {
         this._referenceDataService.serviceStatusStream,
         this._blotterService.serviceStatusStream,
         this._executionService.serviceStatusStream,
-        this._analyticsService.serviceStatusStream)
+        this._analyticsService.serviceStatusStream,
+        this._ordersService.serviceStatusStream)
       .scan(
         (statusLookup:ServiceStatusLookup, serviceStatus:ServiceStatus) => statusLookup.updateServiceStatus(serviceStatus),
         // seed the stream with the initial, empty 'status' data structure
