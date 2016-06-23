@@ -28,6 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configs", "Configs", "{9EB7
 	ProjectSection(SolutionItems) = preProject
 		configs\config.dev.json = configs\config.dev.json
 		configs\config.prod.json = configs\config.prod.json
+		configs\config.webdev.json = configs\config.webdev.json
 	EndProjectSection
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Adaptive.ReactiveTrader.Common", "Adaptive.ReactiveTrader.Common\Adaptive.ReactiveTrader.Common.xproj", "{3FE78B9D-BE39-434F-81A4-C92633D07D4C}"
@@ -43,6 +44,8 @@ EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Adaptive.ReactiveTrader.Server.Common", "Adaptive.ReactiveTrader.Server.Common\Adaptive.ReactiveTrader.Server.Common.xproj", "{03F78A0C-36A1-4171-BB62-F22C9C2172A9}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Adaptive.ReactiveTrader.EventStore", "Adaptive.ReactiveTrader.EventStore\Adaptive.ReactiveTrader.EventStore.xproj", "{9DB332BD-3FF8-4AE3-AD4E-46D917471B75}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Adaptive.ReactiveTrader.Server.Orders", "Adaptive.ReactiveTrader.Server.Orders\Adaptive.ReactiveTrader.Server.Orders.xproj", "{83EAB309-9EF5-498D-9CAC-1389F2C471B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -106,6 +109,10 @@ Global
 		{9DB332BD-3FF8-4AE3-AD4E-46D917471B75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DB332BD-3FF8-4AE3-AD4E-46D917471B75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DB332BD-3FF8-4AE3-AD4E-46D917471B75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83EAB309-9EF5-498D-9CAC-1389F2C471B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83EAB309-9EF5-498D-9CAC-1389F2C471B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83EAB309-9EF5-498D-9CAC-1389F2C471B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83EAB309-9EF5-498D-9CAC-1389F2C471B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,11 @@
+{
+  "eventStore": {
+    "host": "web-dev.adaptivecluster.com",
+    "port": 1113
+  },
+  "broker": {
+    "host": "web-dev.adaptivecluster.com",
+    "port": 8080,
+    "realm": "com.weareadaptive.reactivetrader"
+  }
+}

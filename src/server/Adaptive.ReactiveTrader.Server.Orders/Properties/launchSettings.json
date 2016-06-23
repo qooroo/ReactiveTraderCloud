@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Adaptive.ReactiveTrader.Server.Orders": {
+      "commandName": "Project",
+      "commandLineArgs": "config.webdev.json"
+    }
+  }
+}
