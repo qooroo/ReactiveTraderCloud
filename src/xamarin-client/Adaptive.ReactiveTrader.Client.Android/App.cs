@@ -1,4 +1,4 @@
-using Adaptive.ReactiveTrader.Client.Android.Configuration;
+﻿using Adaptive.ReactiveTrader.Client.Android.Configuration;
 using Adaptive.ReactiveTrader.Client.Configuration;
 using Adaptive.ReactiveTrader.Client.Domain;
 using Android.App;
@@ -6,6 +6,7 @@ using Android.Content.Res;
 using Android.Util;
 using Autofac;
 using Java.Lang;
+using System.Threading.Tasks;
 
 namespace Adaptive.ReactiveTrader.Client.Android
 {
@@ -27,13 +28,13 @@ namespace Adaptive.ReactiveTrader.Client.Android
             }
         }
 
-        public static void Initialize()
+        public static Task InitializeAsync()
         {
             var reactiveTraderApi = Container.Resolve<IReactiveTrader>();
             var username = Username;
             var servers = Container.Resolve<IConfigurationProvider>().Servers;
 
-            reactiveTraderApi.Initialize(username, servers);
+            return reactiveTraderApi.InitializeAsync(username, servers);
         }
 
         private static string _username;

@@ -9,6 +9,7 @@ using Adaptive.ReactiveTrader.Client.Domain.Repositories;
 using Adaptive.ReactiveTrader.Client.Domain.ServiceClients;
 using Adaptive.ReactiveTrader.Client.Domain.Transport.Wamp;
 using Adaptive.ReactiveTrader.Shared.Logging;
+using System.Threading.Tasks;
 
 namespace Adaptive.ReactiveTrader.Client.Domain
 {
@@ -18,14 +19,14 @@ namespace Adaptive.ReactiveTrader.Client.Domain
         private ILog _log;
         private WampServiceClientContainer _serviceClientContainer;
 
-        public void Initialize(string username, string[] servers, ILoggerFactory loggerFactory = null, string authToken = null)
+        public async Task InitializeAsync(string username, string[] servers, ILoggerFactory loggerFactory = null, string authToken = null)
         {
             _loggerFactory = loggerFactory ?? new DebugLoggerFactory();
             _log = _loggerFactory.Create(typeof(ReactiveTrader));
             var concurrencyService = new ConcurrencyService();
 
             _serviceClientContainer = new WampServiceClientContainer(servers[0], username, concurrencyService, _loggerFactory);
-            _serviceClientContainer.ConnectAsync();
+            await _serviceClientContainer.ConnectAsync();
 
             var referenceDataServiceClient = new ReferenceDataServiceClient(_serviceClientContainer.Reference, _loggerFactory);
             var executionServiceClient = new ExecutionServiceClient(_serviceClientContainer.Execution);

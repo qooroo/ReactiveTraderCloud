@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Adaptive.ReactiveTrader.Client.Android.UI.Blotter;
@@ -41,17 +41,18 @@ namespace Adaptive.ReactiveTrader.Client.Android
             Websockets.Droid.WebsocketConnection.Link();
 
             var reactiveTrader = App.Container.Resolve<IReactiveTrader>();
-            Connect(reactiveTrader);
 
-            if (App.IsTablet)
+            Task.Run(() => Connect(reactiveTrader)).ContinueWith(_ =>
             {
-                InitTablet();
-            }
-            else
-            {
-                InitPhone();
-            }
-
+                if (App.IsTablet)
+                {
+                    InitTablet();
+                }
+                else
+                {
+                    InitPhone();
+                }
+            });
         }
 
         private void InitTablet()
@@ -89,9 +90,9 @@ namespace Adaptive.ReactiveTrader.Client.Android
             tabLayout.SetupWithViewPager(viewPager);
         }
 
-        private void Connect(IReactiveTrader reactiveTrader)
+        private async Task Connect(IReactiveTrader reactiveTrader)
         {
-            App.Initialize();
+            await App.InitializeAsync();
 
             _connectingSubscription = reactiveTrader
                 .ConnectionStatusStream
